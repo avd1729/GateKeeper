@@ -1,6 +1,7 @@
-def main():
-    print("Hello from gatekeeper!")
+from fastapi import FastAPI
 
+app = FastAPI()
 
-if __name__ == "__main__":
-    main()
+@app.get("/health")
+def health():
+    return {"Healthy!!"}
