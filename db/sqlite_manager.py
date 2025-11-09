@@ -7,6 +7,10 @@ class SQLiteManager:
         self.conn = self._connect()
         self._create_tables()
 
+    def get_conn(self):
+        # SQLite connections are not thread-safe by default
+        return sqlite3.connect(str(self.db_path), check_same_thread=False)
+
     def _connect(self):
         if not self.db_path.parent.exists():
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -15,7 +19,7 @@ class SQLiteManager:
             conn = sqlite3.connect(str(self.db_path))
             conn.close()
 
-        return sqlite3.connect(str(self.db_path))
+        return sqlite3.connect(str(self.db_path), check_same_thread=False)
 
     def close(self):
         if self.conn:
@@ -47,4 +51,3 @@ class SQLiteManager:
         )
 
         self.conn.commit()
-        self.close()
